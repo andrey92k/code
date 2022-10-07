@@ -8,23 +8,22 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-
-    private $categoryRepository, $productRepository;
-
-    public function __construct(CategoryRepositoryInterface $categoryRepository, ProductRepositoryInterface $productRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
-        $this->productRepository = $productRepository;
+    /**
+     * ProductController constructor.
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(
+        private CategoryRepositoryInterface $categoryRepository,
+        private ProductRepositoryInterface $productRepository
+    ){
     }
 
-    public function getCategory($id)
+    public function getCategory(int $id)
     {
         $categories = $this->categoryRepository->getCategories($id);
         $products = $this->productRepository->getProducts($id);
 
-        dd($categories, $products);     
-        return view('pages.category', [
-            'category' => $category,
-        ]);
+        dd($categories, $products);
     }
 }

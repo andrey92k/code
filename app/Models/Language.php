@@ -9,6 +9,11 @@ class Language extends Model
 {
     use Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public $fillable = [
         'title',
         'code',

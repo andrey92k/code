@@ -6,11 +6,18 @@ use App\Helpers\YesNo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
     use Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public $fillable = [
         'slug',
         'sku',
@@ -25,7 +32,11 @@ class Product extends Model
         'status'
     ];
 
-    protected static function boot()
+    /**
+     * Boot events.
+     * @return void
+     */
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -34,22 +45,34 @@ class Product extends Model
         });
     }
 
-    public function description()
+    /**
+     * @return HasOne
+     */
+    public function description(): HasOne
     {
         return $this->hasOne(ProductDescription::class, 'product_id')->where('language_id', app('language_id'));
     }
 
-    public function related()
+    /**
+     * @return BelongsToMany
+     */
+    public function related(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_related', 'product_id', 'related_id');
     }
 
-    public function featured()
+    /**
+     * @return BelongsToMany
+     */
+    public function featured(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_featured', 'product_id', 'featured_id');
     }
 
-    public function reviews()
+    /**
+     * @return BelongsToMany
+     */
+    public function reviews(): BelongsToMany
     {
         return $this->belongsToMany(Review::class, 'product_review', 'product_id', 'review_id');
     }

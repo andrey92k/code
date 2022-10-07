@@ -7,25 +7,23 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-
-    private $productRepository;
-
-    public function __construct(ProductRepositoryInterface $productRepository)
+    /**
+     * ProductController constructor.
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(private ProductRepositoryInterface $productRepository)
     {
-        $this->productRepository = $productRepository;
     }
 
-    public function getProducts($id)
+    public function getProducts(int $id)
     {
         $products = $this->productRepository->getProducts($id);
+        dd($products);
     }
 
-    public function getProduct($id)
+    public function getProduct(int $id)
     {
         $product = $this->productRepository->find($id);
         dd($product);
-        return view('pages.category', [
-            'product' => $product,
-        ]);
     }
 }

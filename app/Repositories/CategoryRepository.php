@@ -3,37 +3,35 @@
 namespace App\Repositories;
 
 use App\Factories\CategoryFactory;
-use App\Helpers\YesNo;
 use App\Models\Category as GroupEloquent;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
-use Illuminate\Support\Facades\Cache;
-
-//use App\Entities\Group;
 
 class CategoryRepository extends AbstractEloquentRepository implements CategoryRepositoryInterface
 {
     protected $eloquent = GroupEloquent::class;
-    /**
-     * @var CategoyFactory
-     */
-    private $categoryFactory;
 
     /**
      * CategoryRepository constructor.
      * @param CategoryFactory $categoyFactory
      */
-    public function __construct(CategoryFactory $categoryFactory)
+    public function __construct(private CategoryFactory $categoryFactory)
     {
-        $this->categoryFactory = $categoryFactory;
     }
 
-    public function getCategories(int $id)
+    /**
+     * Get categories without children.
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getCategories(int $id): array
     {
-       $data =  $this->model()->without('children')->with(
+       $data =  $this->model()->without('children')->with([
            'description',
            'related',
            'relatedProducts',
-       )->findOrFail($id);
+       ])->findOrFail($id);
 
        return $this->categoryFactory->makeArray($data);
     }

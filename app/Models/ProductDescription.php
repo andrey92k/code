@@ -9,6 +9,11 @@ class ProductDescription extends Model
 {
     use Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public $fillable = [
         'product_id',
         'language_id',

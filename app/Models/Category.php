@@ -7,11 +7,21 @@ use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Category extends Model
 {
     use Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public $fillable = [
         'slug',
         'parent_id',
@@ -19,9 +29,18 @@ class Category extends Model
         'status'
     ];
 
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
     protected $with = ['children'];
 
-    protected static function boot()
+    /**
+     * Boot events.
+     * @return void
+     */
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -30,48 +49,77 @@ class Category extends Model
         });
     }
 
-    public function description()
+    /**
+     * @return HasOne
+     */
+    public function description(): HasOne
     {
         return $this->hasOne(CategoryDescription::class, 'category_id')->where('language_id', app('language_id'));
     }
 
-    public function descriptions()
+    /**
+     * @return HasMany
+     */
+    public function descriptions(): HasMany
     {
         return $this->hasMany(CategoryDescription::class, 'category_id');
     }
 
-    public function related()
+    /**
+     * @return BelongsToMany
+     */
+    public function related(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'category_related', 'category_id', 'related_id');
     }
 
-    public function products()
+    /**
+     * @return HasMany
+     */
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class, 'category_id');
     }
 
-    //children recursive
-
-    public function children()
+    /**
+     * children recursive
+     *
+     * @return HasMany
+     */
+    public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('order', 'ASC');
     }
 
-    public function parent()
+    /**
+     * @return BelongsTo
+     */
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_id')->with('parent')->orderBy('order', 'ASC');
     }
-
-    //recursive Categories
-
+    /**
+     * Tree categories.
+     *
+     * @var array
+     */
     private $descendants = [];
 
-    public function recursiveChildren()
+    /**
+     * recursive Categories
+     * @return array
+     */
+    public function recursiveChildren(): array
     {
         return $this->children()->with('recursiveChildren');
     }
 
-    public function hasChildren()
+    /**
+     * Has Children
+     *
+     * @return bool
+     */
+    public function hasChildren(): bool
     {
         if ($this->recursiveChildren->count()) {
             return true;
@@ -79,6 +127,10 @@ class Category extends Model
 
         return false;
     }
+
+    /**
+     * search descendants
+     */
     public function findDescendants(Category $category)
     {
         $this->descendants[] = $category->id;
@@ -90,7 +142,10 @@ class Category extends Model
         }
     }
 
-    public function getDescendants(Category $category)
+    /**
+     * @return array
+     */
+    public function getDescendants(Category $category): array
     {
         $this->findDescendants($category);
         return $this->descendants;

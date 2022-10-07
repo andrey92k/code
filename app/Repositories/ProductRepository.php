@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Factories\ProductFactory;
-use App\Helpers\YesNo;
 use App\Models\Product as GroupEloquent;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
 
@@ -24,19 +23,33 @@ class ProductRepository extends AbstractEloquentRepository implements ProductRep
         $this->productFactory = $productFactory;
     }
 
-    public function getProducts($id)
+    /**
+     * Get products
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getProducts(int $id): array
     {
         $data = $this->model()->where('category_id', $id)->with([
             'description',
             'related',
             'featured',
-            'reviews'
+            'reviews',
         ])->paginate(10);
 
         return $data->setCollection(collect($this->productFactory->makeArrays($data)));
     }
 
-    public function find(int $id)
+    /**
+     * Get product
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function find(int $id): array
     {
        $data =  $this->model()->findOrFail($id);
 
