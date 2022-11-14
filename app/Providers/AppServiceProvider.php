@@ -50,29 +50,4 @@ class AppServiceProvider extends ServiceProvider
                 return Language::select('id')->where('code',  app()->getLocale())->first()->id;
         });
     }
-
-    // public function getMenus()
-    // {
-    //     View::composer('layouts.header', function($view){
-    //         return $view->with('menus', $this->generateMenus());
-    //     });
-    // }
-
-    // public function generateMenus()
-    // {
-    //     $result = Cache::remember('users', 60, function ()  {
-    //         return Category::with([
-    //             'description',
-    //             'labels',
-    //             'children'
-    //         ])->where('parent_id', 0)->get();
-    //     });
-
-    //     if( $result ){
-    //         $factory = new CategoryFactory();
-    //         return $factory->makeArrayMenu($result);
-    //     }
-
-    //     return [];
-    // }
 }

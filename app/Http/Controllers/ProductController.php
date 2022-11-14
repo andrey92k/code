@@ -15,12 +15,24 @@ class ProductController extends Controller
     {
     }
 
+    /**
+     * Get products
+     *
+     * @param int $id
+     *
+     */
     public function getProducts(int $id)
     {
         $products = $this->productRepository->getProducts($id);
         dd($products);
     }
 
+    /**
+     * Get product
+     *
+     * @param int $id
+     *
+     */
     public function getProduct(int $id)
     {
         $product = $this->productRepository->find($id);

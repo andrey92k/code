@@ -2,14 +2,28 @@
 
 namespace App\Factories;
 
-
 class ProductFactory
 {
+
+    /**
+     * Format product
+     *
+     * @param array $item
+     *
+     * @return array
+     */
     public function makeArray($item): array
     {
         return $item->toArray();
     }
 
+    /**
+     * Format products
+     *
+     * @param array $item
+     *
+     * @return array
+     */
     public function makeArrays($items): array
     {
 

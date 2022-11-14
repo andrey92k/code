@@ -19,6 +19,13 @@ class CategoryController extends Controller
     ){
     }
 
+    /**
+     * Get category
+     *
+     * @param int $id
+     *
+     * @return array
+     */
     public function getCategory(int $id)
     {
         $categories = $this->categoryRepository->getCategories($id);

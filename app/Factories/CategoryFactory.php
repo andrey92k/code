@@ -4,6 +4,13 @@ namespace App\Factories;
 
 class CategoryFactory
 {
+    /**
+     * Format category
+     *
+     * @param array $item
+     *
+     * @return array
+     */
     public function makeArray($item): array
     {
         $categoriesArray = [
@@ -30,6 +37,13 @@ class CategoryFactory
         return $categoriesArray;
     }
 
+    /**
+     * Format menu categories
+     *
+     * @param array $categories
+     *
+     * @return array
+     */
     public function makeArrayMenu($categories): array
     {
         $categoriesArray = [];
@@ -47,6 +61,13 @@ class CategoryFactory
         return $categoriesArray;
     }
 
+    /**
+     * Format menu recursive categories
+     *
+     * @param array $categories
+     *
+     * @return array
+     */
     public function recursiveMakeArrayMenu($categories): array
     {
         $categoriesArray = [];
